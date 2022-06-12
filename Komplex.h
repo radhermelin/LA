@@ -35,6 +35,8 @@ class Komplex
         friend Komplex operator *(const double &left, const Komplex &right);
         friend Komplex operator *(const Komplex &left, const double &right);
 
+        friend Komplex operator ^(const Komplex &base, const int &power);
+
         // Absolute value
         double abs(const Komplex &z);
 
@@ -166,6 +168,25 @@ Komplex operator *(const double &left, const Komplex &right)
 Komplex operator *(const Komplex &left, const double &right)
 {
     return Komplex(left.real * right, left.img * right);
+}
+
+
+/*
+Exponentiation
+*/
+Komplex operator ^(const Komplex &base, const int &power)
+{
+    if(power == 0)
+    {
+        return Komplex();
+    }
+
+    Komplex res(base.real, base.img);
+    for(int i=0; i<power; ++i)
+    {
+        res = res * res;
+    }
+    return res;
 }
 
 // Absolute value

@@ -38,6 +38,8 @@ class Matrix
         template <class U> friend Matrix<U> operator *(const Matrix<U> &left, const Matrix<U> &right);
         template <class U> friend Matrix<U> operator *(const U &left, const Matrix<U> &right);
         template <class U> friend Matrix<U> operator *(const Matrix<U> &left, const U &right);
+        
+        template <class U> friend Matrix<U> operator ^(const Matrix<U> &base, const int &power);
 
         // Output method
         template <class U> friend std::ostream &operator <<(std::ostream &os, const Matrix<U> &matrix);
@@ -91,7 +93,7 @@ Matrix<T>::Matrix(const Matrix<T> &inputMatrix)
     m_nColumns = inputMatrix.m_nColumns;
     m_nElements = inputMatrix.m_nElements;
     m_matrixData = new T[m_nElements];
-    for(int i=0; i<m_nElements; ++i){*(m_matrixData + i) = *(inputMatrix.matrixData + i);}
+    for(int i=0; i<m_nElements; ++i){*(m_matrixData + i) = *(inputMatrix.m_matrixData + i);}
 }
 
 // Destructor
@@ -349,7 +351,6 @@ Matrix<T> operator *(const Matrix<T> &left, const Matrix<T> &right)
     }
 }
 
-
 // == Operator
 template <class T>
 bool Matrix<T>::operator ==(const Matrix<T> &input)
@@ -392,15 +393,29 @@ int Matrix<T>::Sub2Ind(const int row, const int column) const
 template <class T>
 std::ostream &operator <<(std::ostream &os, const Matrix<T> &matrix)
 {
-    for(int row=0; row<matrix.m_nRows; ++row)
+    os << "[ ";
+    for(int col=0; col<matrix.m_nColumns-1; ++col)
     {
-        os << "[ ";
+        os << matrix.getEntry(0, col) << ", ";
+    }
+    os << matrix.getEntry(0, matrix.m_nColumns-1) << " ]\n";
+
+    for(int row=1; row<matrix.m_nRows-1; ++row)
+    {
+        os << "| ";
         for(int col=0; col<matrix.m_nColumns-1; ++col)
         {
             os << matrix.getEntry(row, col) << ", ";
         }
-        os << matrix.getEntry(row, matrix.m_nColumns-1) << " ]\n";
+        os << matrix.getEntry(row, matrix.m_nColumns-1) << " |\n";
     }
+
+    os << "[ ";
+    for(int col=0; col<matrix.m_nColumns-1; ++col)
+    {
+        os << matrix.getEntry(matrix.m_nRows-1, col) << ", ";
+    }
+    os << matrix.getEntry(matrix.m_nRows-1, matrix.m_nColumns-1) << " ]\n";
     return os;
 }
 

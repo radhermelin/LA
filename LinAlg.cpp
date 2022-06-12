@@ -10,6 +10,64 @@
 #include "Matrix.h"
 
 
+Matrix<Komplex> id(const int size)
+{
+    Matrix<Komplex> res(size, size);
+    Komplex z(1, 0);
+    for(int i=0; i<size; ++i)
+    {
+        res.setEntry(i, i, z);
+    }
+    return res;
+}
+
+
+/*
+Calculates the derivative function of a polynomial with complex coefficients.
+*/
+Polynom<Komplex> ableitungsfunktion(const Polynom<Komplex> &f)
+{
+    int deg = f.getDegree();
+    if(deg == 0)
+    {
+        Komplex coef;
+        Polynom<Komplex> res(coef);
+        return res;
+    }
+    Komplex *reslist = new Komplex[deg];
+    for(int i=1; i<=deg; ++i)
+    {
+        *(reslist + i - 1) = (i-1) * f.getCoefficient(i);
+    }
+    Polynom<Komplex> res(deg, reslist);
+    delete[] reslist;
+    return res;
+}
+
+/*
+Calculates the value of a polynomial with complex coefficients at the given value.
+*/
+Komplex einsetzen(const Polynom<Komplex> &f, const Komplex &z)
+{
+    Komplex res;
+    for(int i=0; i<=f.getDegree(); ++i)
+    {
+        res = res + f.getCoefficient(i) * z^(i-1);
+    }
+    return res;
+}
+
+Komplex einsetzen(const Polynom<Komplex> &f, const double &num)
+{
+    Komplex res;
+    for(int i=0; i<=f.getDegree(); ++i)
+    {
+        res = res + f.getCoefficient(i) * num^(i-1);
+    }
+    return res;
+}
+
+
 int main()
 {
     Komplex a;
@@ -29,6 +87,10 @@ int main()
     Matrix<int> M(4, 4, data);
 
     std::cout << M << "\n";
+
+    Matrix<Komplex> A = id(5);
+
+    std::cout << A << "\n";
 
     return 0;
 }

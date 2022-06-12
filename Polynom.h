@@ -7,6 +7,7 @@ class Polynom
     public:
         // Constructors
         Polynom();
+        Polynom(const T coef);
         Polynom(const int cNums, const T *coefs);
         Polynom(const Polynom<T> &f);
 
@@ -52,6 +53,15 @@ Polynom<T>::Polynom()
     degree = 0;
     coefficients = new T[1];
     *coefficients = T();
+}
+
+// Constant polynomial constructor
+template <class T>
+Polynom<T>::Polynom(const T coef)
+{
+    degree = 0;
+    coefficients = new T[1];
+    *coefficients = coef;
 }
 
 // Polynomial from coefficients
